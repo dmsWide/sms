@@ -451,6 +451,7 @@
                                   class="easyui-textbox" type="text"
                                   data-options="multiline:true,required:true,missingMessage:'请填写个人简介'"/>
                        </td>
+
                     </tr>
                 </table>
             </form>
