@@ -1,0 +1,80 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dmswide.dao.ClazzMapper">
+    <!--根据年级 班级进行查询指定或者全部的班级信息-->
+    <select id="selectList" parameterType="com.dmswide.bean.Clazz" resultType="com.dmswide.bean.Clazz">
+        select id,
+               name,
+               number,
+               introduction,
+               coordinator,
+               email,
+               telephone,
+               grade_name
+        from sms_copy.tb_clazz
+        <where>
+            <if test = "gradeName != null and gradeName != '">
+                and grade_name = #{gradeName}
+            </if>
+            <if test = "name != null and name != '">
+                and name like concat(concat('%',#{name}),'%')
+            </if>
+        </where>
+    </select>
+
+    <!--查询所有班级信息 形成班级列表-->
+    <select id="selectAll" resultType="com.dmswide.bean.Clazz">
+        select  id,
+                name,
+                number,
+                introduction,
+                coordinator,
+                email,
+                telephone,
+                grade_name
+        from sms_copy.tb_clazz
+    </select>
+
+    <!--查询指定名称的班级-->
+    <select id = "findByName" parameterType="String" resultType="com.dmswide.bean.Clazz">
+        select  id,
+                name,
+                number,
+                introduction,
+                coordinator,
+                email,
+                telephone,
+                grade_name
+        from sms_copy.tb_clazz
+        where name = #{name}
+    </select>
+
+    <!--添加班级信息-->
+    <insert id = "insert" parameterType="com.dmswide.bean.Clazz">
+        insert into sms_copy.tb_clazz(name,number,introduction,coordinator,email,telephone,grade_name)
+        values(#{name},#{number},#{introduction},#{coordinator},#{email},#{telephone},#{gradeName})
+    </insert>
+
+    <!--指定id数组进行批量删除-->
+    <delete id="deleteById">
+        delete from sms_copy.tb_clazz where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--根据Id更新指定的班级信息-->
+    <update id = "update" parameterType="com.dmswide.bean.Clazz">
+        update sms_copy.tb_clazz
+        set name = #{name},
+            number = #{number},
+            introduction = #{introduction},
+            coordinator = #{coordinator},
+            email = #{email},
+            telephone = #{telephone},
+            grade_name = #{gradeName}
+        where id = #{id}
+    </update>
+</mapper>

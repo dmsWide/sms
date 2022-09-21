@@ -1,0 +1,106 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dmswide.dao.TeacherMapper">
+    <select id="login" parameterType="com.dmswide.bean.LoginForm" resultType="com.dmswide.bean.Teacher">
+        select id,
+               tno,
+               name,
+               gender,
+               password,
+               email,
+               telephone,
+               address,
+               portrait_path,
+               clazz_name
+        from sms_copy.tb_teacher
+        <where>
+            <if test="name != null and name != ''">
+               and name = #{name}
+            </if>
+            <if test="password != null and password != ''">
+                and password = #{password}
+            </if>
+        </where>
+    </select>
+
+    <!--根据班级和老师获取指定/全部老师信息-->
+    <select id = "selectList" parameterType="com.dmswide.bean.Teacher" resultType="com.dmswide.bean.Teacher">
+        select id,
+               tno,
+               name,
+               gender,
+               password,
+               email,
+               telephone,
+               address,
+               portrait_path,
+               clazz_name
+        from sms_copy.tb_teacher
+        <where>
+            <if test="clazzName != null and clazzName != ''">
+                and clazz_name = #{clazzName}
+            </if>
+            <if test="name != null and name != ''">
+                and name like concat(concat('%',#{name}),'%')
+            </if>
+        </where>
+    </select>
+
+    <!--根绝工号查询老师信息-->
+    <select id ="findByTno" parameterType="com.dmswide.bean.Teacher" >
+        select id,
+               tno,
+               name,
+               gender,
+               password,
+               email,
+               telephone,
+               address,
+               portrait_path,
+               clazz_name
+        from sms_copy.tb_teacher
+        where tno = #{tno}
+    </select>
+
+    <!--添加老师信息-->
+    <insert id = "insert" parameterType="com.dmswide.bean.Teacher">
+        insert into sms_copy.tb_teacher(tno, name, gender, password, email, telephone, address, portrait_path, clazz_name)
+        values (#{tno},#{name},#{gender},#{password},#{email},#{telephone},#{address},#{portraitPath},#{clazzName})
+    </insert>
+
+    <!--根据Id修改指定老师信息-->
+    <update id = "update" parameterType="com.dmswide.bean.Teacher">
+        update sms_copy.tb_teacher
+        <set>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="gender != null and gender != ''">gender = #{gender},</if>
+            <if test="password != null and password != ''">password = #{password},</if>
+            <if test="email != null and email != ''">email = #{email},</if>
+            <if test="telephone != null and telephone != ''">telephone = #{telephone},</if>
+            <if test="address != null and address != ''">address = #{address},</if>
+            <if test="introduction != null and introduction != ''">introduction = #{introduction},</if>
+            <if test="portraitPath != null and portraitPath != ''">portrait_path = #{portraitPath},</if>
+            <if test="clazzName != null and clazzName != ''">clazz_name = #{clazzName},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--修改指定Id老师的密码-->
+    <update id = "updatePassword" parameterType="com.dmswide.bean.Teacher">
+        update sms_copy.tb_teacher
+        <set>
+            <if test="password != null and password != ''">password = #{password},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--批量删除教师-->
+    <delete id = "deleteById" parameterType="Integer[]">
+        delete from sms_copy.tb_teacher where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,72 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dmswide.dao.GradeMapper">
+    <!--根据年级名称查询指定、全部年级信息列表-->
+    <select id="selectList" parameterType="com.dmswide.bean.Grade" resultType="com.dmswide.bean.Grade">
+        select id,
+               name,
+               manager,
+               email,
+               telephone,
+               introduction
+        from sms_copy.tb_grade
+        <where>
+            <if test = "gradeName != null and gradeName != ''">
+                and name like concat(concat('%',#{gradeName}),'%')
+            </if>
+        </where>
+    </select>
+
+    <!--查询所有年级信息-->
+    <select id="selectAll" resultType="com.dmswide.bean.Grade">
+        select id,
+               name,
+               manager,
+               email,
+               telephone,
+               introduction
+        from sms_copy.tb_grade
+    </select>
+
+    <!--根据年级名称查询年级信息-->
+    <select id = "findByName" parameterType="String" resultType="com.dmswide.bean.Grade">
+        select id,
+               name,
+               manager,
+               email,
+               telephone,
+               introduction
+        from sms_copy.tb_grade
+        where name = #{gradeName}
+    </select>
+
+    <!--添加年级信息-->
+    <insert id = "insert" parameterType="com.dmswide.bean.Grade">
+        insert into sms_copy.tb_grade(name, manager, email, telephone, introduction)
+        values(#{name},#{manager},#{email},#{telephone},#{introduction})
+    </insert>
+
+    <!--更新年级信息-->
+    <update id = "update" parameterType="com.dmswide.bean.Grade">
+        update sms_copy.tb_grade
+        <set>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="introduction != null and introduction != ''">introduction = #{introduction},</if>
+            <if test="manager != null and manager != ''">manager = #{manager},</if>
+            <if test="email != null and email != ''">email = #{email},</if>
+            <if test="telephone != null and telephone != ''">telephone = #{telephone},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--根据Id批量删除管理员-->
+    <delete id = "deleteById" parameterType="Integer[]">
+        delete from sms_copy.tb_grade
+        where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

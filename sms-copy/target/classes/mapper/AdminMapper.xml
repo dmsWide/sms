@@ -1,0 +1,87 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dmswide.dao.AdminMapper">
+    <!--验证登录信息-->
+    <select id="login" parameterType="com.dmswide.bean.LoginForm" resultType="com.dmswide.bean.Admin">
+        select id,
+               name,
+               gender,
+               password,
+               email,
+               telephone,
+               address,
+               portrait_path
+        from sms_copy.tb_admin
+        where name = #{username} and password = #{password}
+    </select>
+
+    <!--通过姓名查询管理员-->
+    <select id = "findByName" parameterType="String" resultType="com.dmswide.bean.Admin">
+        select id,
+               name,
+               gender,
+               password,
+               email,
+               telephone,
+               address,
+               portrait_path
+        from sms_copy.tb_admin
+        where name = #{name}
+    </select>
+
+    <!--添加管理员-->
+    <insert id = "insert" parameterType="com.dmswide.bean.Admin">
+        insert into sms_copy.tb_admin( name, gender, password, email, telephone, address, portrait_path)
+        values(#{name},#{gender},#{password},#{email},#{telephone},#{address}.#{portrait_path})
+    </insert>
+
+    <!--通过姓名查询管理员-->
+    <select id = "selectList" parameterType="com.dmswide.bean.Admin" resultType="com.dmswide.bean.Admin" >
+        select id,
+               name,
+               gender,
+               password,
+               email,
+               telephone,
+               address,
+               portrait_path
+        from sms_copy.tb_admin
+        <where>
+            <if test="name != null and name != ''">
+                and name like concat(concat('%',#{name}),'%')
+            </if>
+        </where>
+    </select>
+
+    <!--根据Id更新指定的管理员-->
+    <update id = "update" parameterType="com.dmswide.bean.Admin">
+        update sms_copy.tb_admin
+        <set>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="gender != null and gender != ''">name = #{gender},</if>
+            <if test="email != null and email != ''">emial = #{email},</if>
+            <if test="telephone != null and telephone != ''">telephone = #{telephone},</if>
+            <if test="address != null and address != ''">address = #{address},</if>
+            <if test="portraitPath != null and portraitPath != ''">portrait_path = #{portraitPath},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--修改密码 和上一个互补-->
+    <update id = "updatePassword" parameterType="com.dmswide.bean.Admin">
+        update sms_copy.tb_admin
+        set password = #{password}
+        where id = #{id}
+    </update>
+
+    <!--批量删除管理员-->
+    <delete id = "deleteById" parameterType="Integer[]">
+        delete from sms_copy.tb_admin
+        where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
