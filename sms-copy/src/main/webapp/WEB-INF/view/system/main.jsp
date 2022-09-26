@@ -46,7 +46,7 @@
                                 "munuid": "21",
                                 "menuname": "学生列表",
                                 "icon": "icon-student",
-                                "url": "../student/goStudentListView"
+                                "url": "../student/goStudentListView?t=" + new Date().getTime()
                             }
                         ]
                     },
@@ -61,7 +61,7 @@
                                 "munuid": "22",
                                 "menuname": "教师列表",
                                 "icon": "icon-teacher",
-                                "url": "../teacher/goTeacherListView"
+                                "url": "../teacher/goTeacherListView?t="+new Date().getTime()
                             }
                         ]
                     },

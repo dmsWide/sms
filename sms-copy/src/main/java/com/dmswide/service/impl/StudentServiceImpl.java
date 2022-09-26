@@ -32,6 +32,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public int insert(Student student) {
+        System.out.println(student);
         return studentMapper.insert(student);
     }
 

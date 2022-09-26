@@ -107,8 +107,8 @@
                             <label for = "radio-2">老师</label>
                         </div>
                         <div class="radio-box">
-                            <input type="radio" id = "radio-2" name="userType" value = "2"/>
-                            <label for = "radio-1">管理员</label>
+                            <input type="radio" id = "radio-2" name="userType" checked value = "2"/>
+                            <label for = "radio-1">学生</label>
                         </div>
                     </div>
                     <%--登录按钮--%>

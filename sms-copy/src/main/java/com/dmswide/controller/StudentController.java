@@ -35,7 +35,7 @@ public class StudentController {
      */
     @GetMapping("/goStudentListView")
     public ModelAndView goStudentListView(ModelAndView modelAndView){
-        //向studentList页面发送一个存储clzz的list
+        //向studentList页面发送一个存储clazz的list
         modelAndView.addObject("clazzList",clazzService.selectAll());
         modelAndView.setViewName("student/studentList");
         return modelAndView;
@@ -47,8 +47,12 @@ public class StudentController {
      */
     @PostMapping("/getStudentList")
     @ResponseBody
-    public Map<String,Object> getStudentList(Integer pageNum,Integer pageSize,String studentName,String clazzName){
-        Student student = new Student(studentName, clazzName);
+    public Map<String,Object> getStudentList(@RequestParam(value = "page") Integer pageNum,
+                                             @RequestParam(value = "rows") Integer pageSize,
+                                             @RequestParam(value = "studentname",required = false)String studentName,
+                                             @RequestParam(value = "clazzname",required = false)String clazzName){
+
+        Student student = new Student(studentName,clazzName);
         PageHelper.startPage(pageNum,pageSize);
         List<Student> students = studentService.selectList(student);
         PageInfo<Student> studentPageInfo = new PageInfo<>(students);
@@ -73,7 +77,7 @@ public class StudentController {
             result.put("msg","学号已经存在！修改后重试");
             return result;
         }
-        //添加
+        //添加学生信息
         if(studentService.insert(student) > 0){
             result.put("success",true);
         }else{
@@ -125,11 +129,13 @@ public class StudentController {
      */
     @PostMapping("/uploadPhoto")
     @ResponseBody
-    public Map<String,Object> uploadPhoto(MultipartFile multipartFile, HttpServletRequest request){
+    public Map<String,Object> uploadPhoto(@RequestParam(value = "photo") MultipartFile multipartFile,
+                                          HttpServletRequest request){
+
         //存储头像本地目录
         final String dirPath = request.getServletContext().getRealPath("/upload/student_portrait/");
         //存储头像的发布目录
-        final String portraitPath = request.getServletContext().getContextPath() + "/upload/student_portrait";
+        final String portraitPath = request.getServletContext().getContextPath() + "/upload/student_portrait/";
         return UploadFile.getUploadResult(multipartFile,dirPath,portraitPath);
     }
 }

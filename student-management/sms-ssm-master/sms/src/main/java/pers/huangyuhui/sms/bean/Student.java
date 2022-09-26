@@ -106,4 +106,5 @@ public class Student {
     public void setClazz_name(String clazz_name) {
         this.clazz_name = clazz_name;
     }
+
 }

@@ -58,7 +58,8 @@ public class UploadFile {
             try{
                 multipartFile.transferTo(new File(dirPath + newPhotoName));
                 uploadResult.put("success",true);
-                uploadResult.put("portrait_path",portraitPath + newPhotoName);
+                //将存储头像的项目路径返回给页面
+                uploadResult.put("portraitPath",portraitPath + newPhotoName);
             }catch (IOException e){
                 e.printStackTrace();
                 uploadResult.put("success",false);

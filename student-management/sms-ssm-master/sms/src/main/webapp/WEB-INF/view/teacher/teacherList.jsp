@@ -67,7 +67,7 @@
                 pageList: [10, 20, 30, 50, 100],//设置每页记录的条数
                 beforePageText: '第',
                 afterPageText: '页    共 {pages} 页',
-                displayMsg: '当前显示 {from} - {to} 条记录   共 {total} 条记录'
+                displayMsg: '当前显示 {from} - {to} 条记录   共 {total} 条记录',
             });
 
             //信息添加按钮事件
@@ -297,8 +297,8 @@
                 $("#add-portrait").attr("src", data.portrait_path);
                 $("#edit-portrait").attr("src", data.portrait_path);
                 //将头像路径存储到教师信息表单中(利用从用户信息中读取头像路径来显示头像)
-                $("#add_portrait-path").val(data.portrait_path);
-                $("#edit_portrait-path").val(data.portrait_path);
+                $("#add_portrait-path").val("src",data.portrait_path);
+                $("#edit_portrait-path").val("src",data.portrait_path);
             } else {
                 $.messager.alert("提示", data.msg, "warning");
             }
@@ -359,7 +359,7 @@
               target="photo_target">
             <input id="choose-portrait" class="easyui-filebox" name="photo" data-options="prompt:'选择照片'"
                    style="width:200px;">
-            <input id="add-upload-btn" class="easyui-linkbutton" style="width: 50px; height: 24px;;float:right;"
+            <input id="add-upload-btn" class="easyui-linkbutton" style="width: 50px; height: 24px;float:right;"
                    type="button" value="上传"/>
         </form>
     </div>
@@ -448,7 +448,7 @@
               target="photo_target">
             <input id="edit-choose-portrait" class="easyui-filebox" name="photo" data-options="prompt:'选择照片'"
                    style="width:200px;">
-            <input id="edit-upload-btn" class="easyui-linkbutton" style="width: 50px; height: 24px;;float:right;"
+            <input id="edit-upload-btn" class="easyui-linkbutton" style="width: 50px; height: 24px;float:right;"
                    type="button" value="上传"/>
         </form>
     </div>

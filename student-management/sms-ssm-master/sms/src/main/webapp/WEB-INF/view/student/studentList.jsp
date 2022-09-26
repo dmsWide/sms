@@ -75,6 +75,7 @@
             $("#add").click(function () {
                 table = $("#addTable");
                 $("#addTable").form("clear");//清空表单数据
+                $("#add-portrait").attr("src","${pageContext.request.contextPath}/image/portrait/default_student_portrait.png");
                 $("#addDialog").dialog("open");//打开添加窗口
             });
 
@@ -316,8 +317,11 @@
 
 <!-- 工具栏 -->
 <div id="toolbar">
-    <div style="float: left;"><a id="add" href="javascript:" class="easyui-linkbutton"
-                                 data-options="iconCls:'icon-add',plain:true">添加</a></div>
+    <div style="float: left;">
+        <a id="add" href="javascript:" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">
+            添加
+        </a>
+    </div>
     <div style="float: left;" class="datagrid-btn-separator"></div>
     <%-- 通过JSTL设置用户操作权限: 将修改和删除按钮设置为仅管理员和教师可见	 --%>
     <c:if test="${userType==1 || userType== 3 }">

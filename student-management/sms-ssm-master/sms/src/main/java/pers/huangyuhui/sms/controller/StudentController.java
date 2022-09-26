@@ -84,7 +84,6 @@ public class StudentController {
         //存储数据对象
         result.put("total", total);
         result.put("rows", studentList);
-
         return result;
     }
 
@@ -110,7 +109,6 @@ public class StudentController {
             result.put("success", false);
             result.put("msg", "添加失败! (ಥ_ಥ)服务器端发生异常!");
         }
-
         return result;
     }
 
@@ -162,10 +160,14 @@ public class StudentController {
     @PostMapping("/uploadPhoto")
     @ResponseBody
     public Map<String, Object> uploadPhoto(MultipartFile photo, HttpServletRequest request) {
+        System.out.println("准备上传头像");
+        System.out.println("photo = " + photo);
         //存储头像的本地目录
         final String dirPath = request.getServletContext().getRealPath("/upload/student_portrait/");
+        System.out.println("dirPath = " + dirPath);
         //存储头像的项目发布目录
         final String portraitPath = request.getServletContext().getContextPath() + "/upload/student_portrait/";
+        System.out.println("portraitPath = " + portraitPath);
         //返回头像的上传结果
         return UploadFile.getUploadResult(photo, dirPath, portraitPath);
     }

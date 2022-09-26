@@ -73,4 +73,18 @@ public class Admin {
     public void setPortraitPath(String portraitPath) {
         this.portraitPath = portraitPath;
     }
+
+    @Override
+    public String toString() {
+        return "Admin{" +
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", gender=" + gender +
+            ", password='" + password + '\'' +
+            ", email='" + email + '\'' +
+            ", telephone='" + telephone + '\'' +
+            ", address='" + address + '\'' +
+            ", portraitPath='" + portraitPath + '\'' +
+            '}';
+    }
 }

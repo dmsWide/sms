@@ -16,8 +16,8 @@
                clazz_name
         from sms_copy.tb_teacher
         <where>
-            <if test="name != null and name != ''">
-               and name = #{name}
+            <if test="username != null and username != ''">
+               and name = #{username}
             </if>
             <if test="password != null and password != ''">
                 and password = #{password}
@@ -49,7 +49,7 @@
     </select>
 
     <!--根绝工号查询老师信息-->
-    <select id ="findByTno" parameterType="com.dmswide.bean.Teacher" >
+    <select id ="findByTno" parameterType="com.dmswide.bean.Teacher" resultType="com.dmswide.bean.Teacher">
         select id,
                tno,
                name,

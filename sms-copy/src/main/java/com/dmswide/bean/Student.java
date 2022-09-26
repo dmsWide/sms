@@ -2,7 +2,7 @@ package com.dmswide.bean;
 
 public class Student {
     private Integer id;
-    private String son;
+    private String sno;
     private String name;
     private char gender = '男';
     private String password;
@@ -26,12 +26,12 @@ public class Student {
         this.id = id;
     }
 
-    public String getSon() {
-        return son;
+    public String getSno() {
+        return sno;
     }
 
-    public void setSon(String son) {
-        this.son = son;
+    public void setSno(String sno) {
+        this.sno = sno;
     }
 
     public String getName() {
@@ -104,5 +104,22 @@ public class Student {
 
     public void setClazzName(String clazzName) {
         this.clazzName = clazzName;
+    }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+            "id=" + id +
+            ", sno='" + sno + '\'' +
+            ", name='" + name + '\'' +
+            ", gender=" + gender +
+            ", password='" + password + '\'' +
+            ", email='" + email + '\'' +
+            ", telephone='" + telephone + '\'' +
+            ", address='" + address + '\'' +
+            ", introduction='" + introduction + '\'' +
+            ", portraitPath='" + portraitPath + '\'' +
+            ", clazzName='" + clazzName + '\'' +
+            '}';
     }
 }

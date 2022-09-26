@@ -1,6 +1,5 @@
 package pers.huangyuhui.sms.service;
 
-import org.springframework.stereotype.Service;
 import pers.huangyuhui.sms.bean.LoginForm;
 import pers.huangyuhui.sms.bean.Student;
 
@@ -19,7 +18,7 @@ public interface StudentService {
     // TODO: 6/18/2019 验证登录信息是否正确
     Student login(LoginForm loginForm);
 
-    // TODO: 6/17/2019 根据班级与学生名获取指定或全部学生信息列表
+    // TODO: 6/17/2019 根据班级与学生名获取或指定全部学生信息列表
     List<Student> selectList(Student student);
 
     // TODO: 6/19/2019 根据学号获取指定学生信息

@@ -5,7 +5,7 @@
   Time: 20:39
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%--use EL-Expression--%>
 <%@ page isELIgnored="false" %>
 <%--use JSTL--%>
@@ -20,12 +20,11 @@
         <link href="${pageContext.request.contextPath}/static/easyui/themes/default/easyui.css" rel="stylesheet" type="text/css">
         <link href="${pageContext.request.contextPath}/static/easyui/themes/icon.css" rel="stylesheet" type="text/css">
         <link href="${pageContext.request.contextPath}/static/easyui/css/demo.css" rel="stylesheet" type="text/css">
-        <link href="${pageContext.request.contextPath}/static/easyui/themes/metro/accordion.css" rel="stylesheet" type="text/css">
-        <link href="${pageContext.request.contextPath}/static/easyui/themes/metro/linkbutton.css" rel="stylesheet" type="text/css">
-        <link href="${pageContext.request.contextPath}/static/easyui/themes/metro/combobox.css" rel="stylesheet" type="text/css">
+
         <%--引入js--%>
         <script src="${pageContext.request.contextPath}/static/easyui/jquery.min.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/static/easyui/jquery.easyui.min.js" type="text/javascript"></script>
+
         <script src="${pageContext.request.contextPath}/static/easyui/themes/locale/easyui-lang-zh_CN.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/static/easyui/js/validateExtends.js" type="text/javascript"></script>
 
@@ -34,13 +33,13 @@
             $(function(){
                 var table;
                 //初始化datagrid
-                $("#dataList").datagrid({
-                    iconCls:'icon-more',
+                $('#dataList').datagrid({
+                    iconCls:'icon-more',//竖着的三个点组成的icon
                     border:true,
                     collapsible: false,//是否可折叠设置为false
                     fit: true,//自动大小
                     method: "post",
-                    url: "getStudentList?t" + new Date().getTime(),
+                    url: "getStudentList?t=" + new Date().getTime(),
                     idField:'id',
                     singleSelect:false,//是否单选
                     rownumbers: true,//行号
@@ -51,8 +50,8 @@
                     columns: [[
                         {field:'chk',checkbox:true,width:50},
                         {field:'id',title:'ID',width:50,sortable: true},
-                        {field:'clazz_name',title:'所属班级',width:150},
-                        {name:'name',title:'姓名',width:150},
+                        {field:'clazzName',title:'所属班级',width:150},
+                        {field:'name',title:'姓名',width:150},
                         {field:'sno',title:'学号',width:150},
                         {field:'gender',title:'性别',width:150},
                         {field:'email',title:'邮箱',width:150},
@@ -64,24 +63,25 @@
                 });
 
                 /*设置分页控件*/
-                var p = $("#dataList").datagrid('getPaper');
+                var p = $('#dataList').datagrid('getPager');
                 $(p).pagination({
                     pageSize: 10,//设置每页显示的记录条数，默认为10
-                    pageList:[10,20,30,50,100],
+                    pageList:[10, 20, 30, 50, 100],//每页记录的条数
                     beforePageText:'第',
-                    afterPageText:'页 共{pages}页',
-                    displayMsg:'当前显示{from} - {to}条记录  共{total}条记录',
+                    afterPageText:'页    共 {pages} 页',
+                    displayMsg:'当前显示 {from} - {to} 条记录   共 {total} 条记录',
                 });
 
-                /*新题现价按钮事件*/
+                /*信息添加按钮事件*/
                 $("#add").click(function(){
                     table = $("#addTable");
-                    $("addTable").form("clear");//清空
+                    $("#addTable").form("clear");//清空表单数据
+                    $("#add-portrait").attr("src","${pageContext.request.contextPath}/image/portrait/default_student_portrait.png");
                     $("#addDialog").dialog("open");//打开添加窗口
                 });
 
-                //信息修改按钮事件
-                $("edis").click(function () {
+                /*信息修改按钮事件*/
+                $("#edit").click(function () {
                     table = $("#editTable");
                     var selectRows = $("#dataList").datagrid("getSelections");
                     if(selectRows.length !== 1){
@@ -91,16 +91,17 @@
                     }
                 });
 
-                /*删除信息按钮事件*/
-                $("delete").click(function () {
+                /*信息删除按钮事件*/
+                $("#delete").click(function () {
                     //返回所有选中的列，没有选中时返回空数组
-                    var selectRows = $("dataList").datagrid("getSelections");
+                    var selectRows = $("#dataList").datagrid("getSelections");
                     var selectLength = selectRows.length;
                     if(selectLength === 0){
-                        $.messager("提醒消息","亲选择想要删除的数据","warning");
+                        $.messager.alert("提醒消息","亲选择想要删除的数据","warning");
                     }else{
                         var ids = [];
                         $(selectRows).each(function (i,row) {
+                            //将要删除的行的Id存入数组中
                             ids[i] = row.id;
                         });
                         /*确认后执行后执行回调函数*/
@@ -108,7 +109,7 @@
                             if(r){
                                 $.ajax({
                                     type: "post",
-                                    url: "deleteStudent?t" + new Date().getTime(),
+                                    url: "deleteStudent?t=" + new Date().getTime(),
                                     data:{ids:ids},
                                     dataType: "json",
                                     success: function (data) {
@@ -148,7 +149,7 @@
                                 if(!validate){
                                     $.messager.alert("提醒消息","请检查输入的数据","warning");
                                 }else{
-                                    var data = $("addForm").serialize();//序列化表单信息
+                                    var data = $("#addForm").serialize();//序列化表单信息
                                     $.ajax({
                                         type: "post",
                                         url: "addStudent?t=" + new Date().getTime(),
@@ -207,7 +208,7 @@
                                 if(!validate){
                                     $.messager.alert("提醒消息","请检查输入的数据","warning");
                                 }else{
-                                    var data = $("editForm").serialize();//序列化表单信息
+                                    var data = $("#editForm").serialize();//序列化表单信息
                                     $.ajax({
                                         type: "post",
                                         url: "editStudent?t=" + new Date().getTime(),
@@ -246,68 +247,70 @@
                     onBeforeOpen:function(){
                         var selectRow = $("#dataList").datagrid("getSelected");
                         $("#edit_id").val(selectRow.id);//初始化id值，需要根据id更新学生信息
-                        $("#edit_sno").textbox("setValue",selectRow.sno);
-                        $("#edit_name").textbox("setValue",selectRow.name);
-                        $("#edit_gender").textbox("setValue",selectRow.gender);
-                        $("#edit_password").textbox("setValue",selectRow.password);
-                        $("#edit_email").textbox("setValue",selectRow.email);
-                        $("#edit_telephone").textbox("setValue",selectRow.telephone);
-                        $("#edit_address").textbox("setValue",selectRow.address);
-                        $("#edit_introduction").textbox("setValue",selectRow.introduction);
-                        $("#edit_portrait").textbox("src",selectRow.portrait_path);
+                        $("#edit_sno").textbox('setValue',selectRow.sno);
+                        $("#edit_name").textbox('setValue',selectRow.name);
+                        $("#edit_gender").textbox('setValue',selectRow.gender);
+                        $("#edit_password").textbox('setValue',selectRow.password);
+                        $("#edit_email").textbox('setValue',selectRow.email);
+                        $("#edit_telephone").textbox('setValue',selectRow.telephone);
+                        $("#edit_address").textbox('setValue',selectRow.address);
+                        $("#edit_introduction").textbox('setValue',selectRow.introduction);
+                        $("#edit-portrait").attr('src',selectRow.portraitPath);
                     }
                 });
 
                 /*学生姓名和班级名称搜索按钮的监听事件(返回值给Controller)*/
                 $("#search-btn").click(function () {
-                    $("#dataList").datagrid("load",{
+                    $('#dataList').datagrid('load',{
                         //获取学生姓名
                         studentname: $("#search-studentname").val(),
                         //获取年级名称
-                        clazzname: $("#search-clazzname").combobox("getValue");
+                        clazzname: $("#search-clazzname").combobox("getValue")
                     });
                 });
 
                 /*添加信息窗口中上传头像的按钮事件*/
                 $("#add-upload-btn").click(function () {
-                    if($("choose-portrait").filebox("getValue") === ''){
+                    if($("#choose-portrait").filebox("getValue") === ''){
                         $.messager.alert("提示信息","请选择图片","warning");
                         return;
                     }
-                    $("add-uploadForm").submit();
+                    $("#add-uploadForm").submit();
                 });
 
                 /*修改信息中上传头像的按钮事件*/
                 $("#edit-upload-btn").click(function () {
-                    if($("edit-choose-portrait").filebox("getValue") === ''){
+                    if($("#edit-choose-portrait").filebox("getValue") === ''){
                         $.messager.alert("提示信息","请选择图片","warning");
+                        return;
                     }
                     $("#edit-uploadForm").submit();
                 });
             });
 
             /*上传头像按钮事件*/
-            function upload(){
+            function uploaded(){
                 var data = $(window.frames["photo_target"].document).find("body pre").text();
                 //将data转换为JSON对象
                 data = JSON.parse(data);
                 if(data.success){
                     $.messager.alert("提示信息","图片上传成功","info");
                     //切换头像
-                    $("#add-portrait").attr("src",data.portrait_path);
-                    $("#edit-portrait").attr("src",data.portrait_path);
+                    $("#add-portrait").attr("src",data.portraitPath);
+                    $("#edit-portrait").attr("src",data.portraitPath);
                     /*将头像路径存储到学生信息表单当中(从用户信息中读取头像路径来显示头像)*/
-                    $("#add_portrait-path").val(data.portrait_path);
-                    $("edit_portrait-path").val(data.portrait_path);
+                    $("#add_portrait-path").val(data.portraitPath);
+                    $("#edit_portrait-path").val(data.portraitPath);
                 }else{
                     $.messager.alert("提示信息",data.msg,"warning");
                 }
             }
         </script>
     </head>
+
     <body>
         <table id="dataList" cellspacing="0" cellpadding="0"></table>
-        <%--工具栏--%>
+        <%--工具栏:添加 编辑 删除 查找等功能按钮--%>
         <div id="toolbar">
             <div style="float:left;">
                 <a id="add" href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">
@@ -320,22 +323,22 @@
             <%--jstl设置用户操作权限：将编辑和删除按钮设置为仅管理员和教师可见--%>
             <c:if test="${userType == 1 || userType == 3}">
                 <div style="float: left">
-                    <a id="edit" href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true">
+                    <a id="edit" href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true">
                         修改
                     </a>
                 </div>
                 <div style="float: left;" class="datagrid-btn-separator"></div>
                 <div style="float: left;">
-                <a id="delete" href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-some-delete',plain:true">
-                    删除
-                </a>
+                    <a id="delete" href="javascript:vpod(0)" class="easyui-linkbutton" data-options="iconCls:'icon-some-delete',plain:true">
+                        删除
+                    </a>
                 </div>
             </c:if>
-            <%--学生名和班级名 搜索域--%>
+            <%--学生 班级名 搜索域--%>
             <div style="margin-left: 10px;">
                 <div style="float: left;" class="datagrid-btn-separator"></div>
                 <%--班级名称下拉列表--%>
-                <a href="javascript:void(0)" class="easyui-linkbutton" data-options="inconCls:'icon-class',plain:true">
+                <a href="javascript:(0)" class="easyui-linkbutton" data-options="inconCls:'icon-class',plain:true">
                     班级名称
                 </a>
                 <select id="search-clazzname" name = "clazzname" style="width: 155px;" class="easyui-combobox">
@@ -349,7 +352,8 @@
                 <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-user-student',plain:true">
                     学生姓名
                 </a>
-                <input id="search-studentname" name ="studnetname" class="easyui-textbox"/>
+
+                <input id="search-studentname" name ="studentname" class="easyui-textbox"/>
 
                 <%--搜索按钮--%>
                 <a id="search-btn" href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true">
@@ -361,7 +365,7 @@
         <%--添加信息窗口--%>
         <div id="addDialog" style="padding: 15px 0 0 55px;">
             <%--设置添加头像功能--%>
-            <div id = "add-photo" style="float: right;mrgin:15px 40px 0 0;width: 250px;border: 1px solid #EEF4FF">
+            <div id = "add-photo" style="float: right;margin:15px 40px 0 0;width: 250px;border: 1px solid #EEF4FF">
                 <img id="add-portrait" alt="照片" style="max-width: 250px;max-height: 300px;" title="照片"
                     src="${pageContext.request.contextPath}/image/portrait/default_student_portrait.png"/>
                 <%--设置上传图片按钮--%>
@@ -374,11 +378,11 @@
             <form id="addForm" method="post" action="#">
                 <table id="addTable" style="border-collapse: separate;border-spacing: 0 3px;" cellpadding="6">
                     <%--存储上传头像的路径--%>
-                    <input id="add_portrait-path" name="portrait_path" type="hidden"/>
+                    <input id="add_portrait-path" name="portraitPath" type="hidden"/>
                     <tr>
                         <td>班级</td>
                         <td colspan="1">
-                            <select id="add_clazz_name" name ="clazz_name" style="width:200px;height: 30px"
+                            <select id="add_clazz_name" name ="clazzName" style="width:200px;height: 30px"
                                     class="easyui-combobox" data-options="required:true,missingMessage:'请选择所属班级'">
 
                                 <c:forEach items="${clazzList}" var="clazz">
@@ -451,7 +455,6 @@
                                   class="easyui-textbox" type="text"
                                   data-options="multiline:true,required:true,missingMessage:'请填写个人简介'"/>
                        </td>
-
                     </tr>
                 </table>
             </form>
@@ -464,7 +467,7 @@
                 src = "${pageContext.request.contextPath}/image/portrait/default_student_portrait.png">
 
                 <%--设置上传图片按钮--%>
-                <form id="edit-uploadForm" method="post" enctype="multipart/form-data" action="uploadPhoto" target="photo_taeget">
+                <form id="edit-uploadForm" method="post" enctype="multipart/form-data" action="uploadPhoto" target="photo_target">
                     <input id="edit-choose-portrait" name="photo" class="easyui-filebox"
                            data-options="prompt:'选择照片'" style="width: 200px"/>
                     <input id="edit-upload-btn" class="easyui-linkbutton" style="width: 50px;height: 24px;float:right;"
@@ -477,11 +480,11 @@
                 <input id="edit_id" name="id" type="hidden"/>
                 <table id="editTable" style="border-collapse: separate;border-spacing:0 3px;" cellpadding="6">
                     <%--存储上传头像路径--%>
-                    <input id="edit_portrait-path" name="portrait_path" type="hidden"/>
+                    <input id="edit_portrait-path" name="portraitPath" type="hidden"/>
                     <tr>
                         <td>班级</td>
                         <td colspan="1">
-                            <select id="edit_clazz_name" name="clazz_name" style="width: 200px;height: 30px;" class="easyui-combobox">
+                            <select id="edit_clazz_name" name="clazzName" style="width: 200px;height: 30px;" class="easyui-combobox">
                                 <c:forEach items="${clazzList}" var = "clazz">
                                     <option value="${clazz.name}">${clazz.name}</option>
                                 </c:forEach>

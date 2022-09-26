@@ -45,7 +45,10 @@ public class TeacherController {
      */
     @PostMapping("/getTeacherList")
     @ResponseBody
-    public Map<String,Object> getTeacherList(Integer pageNum,Integer pageSize,String teacherName,String clazzName){
+    public Map<String,Object> getTeacherList(@RequestParam(value = "page") Integer pageNum,
+                                             @RequestParam(value = "rows") Integer pageSize,
+                                             @RequestParam(value = "teachername",required = false) String teacherName,
+                                             @RequestParam(value = "clazzname",required = false) String clazzName){
         Teacher teacher = new Teacher(teacherName, clazzName);
         PageHelper.startPage(pageNum,pageSize);
         //查询全部老师信息

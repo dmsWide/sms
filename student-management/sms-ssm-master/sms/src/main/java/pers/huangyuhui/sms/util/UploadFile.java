@@ -68,7 +68,7 @@ public class UploadFile {
      * @return: java.util.Map<java.lang.String, java.lang.Object>
      */
     public static Map<String, Object> getUploadResult(MultipartFile photo, String dirPaht, String portraitPath) {
-
+        System.out.println("正在上传头像中....");
         if (!photo.isEmpty() && photo.getSize() > 0) {
             //获取图片的原始名称
             String orginalName = photo.getOriginalFilename();
@@ -90,7 +90,6 @@ public class UploadFile {
                 upload_result.put("msg", "上传文件失败! 服务器端发生异常!");
                 return upload_result;
             }
-
         } else {
             upload_result.put("success", false);
             upload_result.put("msg", "头像上传失败! 未找到指定图片!");
