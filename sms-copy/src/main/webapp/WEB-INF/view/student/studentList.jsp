@@ -464,7 +464,7 @@
             <%--设置修改头像功能--%>
             <div id = "edit-photo" style="float:right;margin: 15px 40px 0 0;width: 250px;border:1px solid #EEF4FF">
                 <img id="edit-portrait" alt="照片" style="max-width: 250px;max-height: 300px;" title="照片"
-                src = "${pageContext.request.contextPath}/image/portrait/default_student_portrait.png">
+                src = "${pageContext.request.contextPath}/image/portrait/default_student_portrait.png"/>
 
                 <%--设置上传图片按钮--%>
                 <form id="edit-uploadForm" method="post" enctype="multipart/form-data" action="uploadPhoto" target="photo_target">

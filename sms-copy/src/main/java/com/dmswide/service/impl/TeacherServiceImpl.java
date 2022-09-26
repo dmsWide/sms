@@ -32,9 +32,7 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public int insert(Teacher teacher) {
-        return teacherMapper.insert(teacher);
-    }
+    public int insert(Teacher teacher) {return teacherMapper.insert(teacher);}
 
     @Override
     public int update(Teacher teacher) {

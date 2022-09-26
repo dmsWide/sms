@@ -26,7 +26,18 @@
     </select>
 
     <!--根据班级和老师获取指定/全部老师信息-->
-    <select id = "selectList" parameterType="com.dmswide.bean.Teacher" resultType="com.dmswide.bean.Teacher">
+    <resultMap id="teacherMap" type="com.dmswide.bean.Teacher">
+        <id property="id" column="id"/>
+        <result property="tno" column="tno"/>
+        <result property="name" column="name"/>
+        <result property="gender" column="gender"/>
+        <result property="password" column="password"/>
+        <result property="email" column="email"/>
+        <result property="address" column="address"/>
+        <result property="clazzName" column="clazz_name"/>
+        <result property="portraitPath" column="portrait_path"/>
+    </resultMap>
+    <select id = "selectList" parameterType="com.dmswide.bean.Teacher" resultMap="teacherMap">
         select id,
                tno,
                name,
@@ -80,7 +91,6 @@
             <if test="email != null and email != ''">email = #{email},</if>
             <if test="telephone != null and telephone != ''">telephone = #{telephone},</if>
             <if test="address != null and address != ''">address = #{address},</if>
-            <if test="introduction != null and introduction != ''">introduction = #{introduction},</if>
             <if test="portraitPath != null and portraitPath != ''">portrait_path = #{portraitPath},</if>
             <if test="clazzName != null and clazzName != ''">clazz_name = #{clazzName},</if>
         </set>

@@ -44,6 +44,7 @@
                     pagination:true,
                     sortName:'id',
                     sortOrder:'DESC',
+                    remoteSort: false,
                     columns:[[
                         {field:'chk',checkbox:true,width:50},
                         {field:'id',title:'ID',width:50,sortable:true},
@@ -72,13 +73,14 @@
                 $("#add").click(function () {
                     table = $("#addTable");
                     $("#addTable").form("clear");
+                    $("#add-portrait").attr("src","${pageContext.request.contextPath}/image/portrait/default_teacher_portrait.png");
                     $("#addDialog").dialog("open");
                 });
 
                 /*信息修改按钮事件*/
                 $("#edit").click(function () {
                     table = $("#editTable");
-                    var selectRows = $("dataList").datagrid("getSelections");
+                    var selectRows = $("#dataList").datagrid("getSelections");
                     if(selectRows.length !== 1){
                         $.messager.alert("消息提醒","请选择单挑数据","warning");
                     }else{
@@ -87,9 +89,9 @@
                 });
 
                 /*信息删除按钮事件*/
-                $("delete").click(function () {
+                $("#delete").click(function () {
                     /*返回所有选中的行 或者返回空*/
-                    var selectRows = $("dataList").datagrid("getSelections");
+                    var selectRows = $("#dataList").datagrid("getSelections");
                     var selectLength = selectRows.length;
                     if(selectLength === 0){
                         $.messager.alert("消息提醒","请选择想要删除的数据","warning");
@@ -98,7 +100,7 @@
                         $(selectRows).each(function (i,row) {
                             ids[i] = row.id;
                         });
-                        $.messager.alert("消息提醒","删除后无法恢复！确定继续？",function (r) {
+                        $.messager.confirm("消息提醒","删除后无法恢复！确定继续？",function (r) {
                             if(r){
                                 $.ajax({
                                     type: "post",
@@ -149,7 +151,7 @@
                                         url: "addTeacher?t=" + new Date().getTime(),
                                         data:data,
                                         dataType: "json",
-                                        success:function(){
+                                        success:function(data){
                                             if(data.success){
                                                 $("#addDialog").dialog("close");
                                                 $("#dataList").datagrid("reload");
@@ -174,7 +176,6 @@
                                 $("#add_tno").textbox("setValue","");
                                 $("#add_gender").textbox("setValue","男");
                                 $("#add_name").textbox("setValue","");
-                                $("#add_introduction").textbox("setValue","");
                             }
                         }
                     ]
@@ -210,7 +211,7 @@
                                         url: "editTeacher?t=" + new Date().getTime(),
                                         data:data,
                                         dataType: "json",
-                                        success:function(){
+                                        success:function(data){
                                             if(data.success){
                                                 $("#editDialog").dialog("close");
                                                 $("#dataList").datagrid("reload");
@@ -235,7 +236,6 @@
                                 $("#edit_password").textbox("setValue","");
                                 $("#edit_gender").textbox("setValue","男");
                                 $("#edit_name").textbox("setValue","");
-                                $("#edit_introduction").textbox("setValue","");
                             }
                         }
                     ],
@@ -245,6 +245,7 @@
                         /*后端数据进行初始化*/
                         $("#edit_id").val(selectRow.id);
                         $("#edit_tno").textbox("setValue",selectRow.tno);
+                        $("#edit_clazz_name").textbox("setValue",selectRow.clazzName);
                         $("#edit_name").textbox("setValue",selectRow.name);
                         $("#edit_gender").textbox("setValue",selectRow.gender);
                         $("#edit_password").textbox("setValue",selectRow.password);
@@ -256,7 +257,7 @@
                 });
 
                 /*搜索教师按钮*/
-                $("search-btn").click(function(){
+                $("#search-btn").click(function(){
                     $("#dataList").datagrid("load",{
                         teachername:$("#search-teachername").val(),
                         clazzname:$("#search-clazzname").combobox("getValue")
@@ -288,11 +289,11 @@
                 data = JSON.parse(data);
                 if(data.success){
                     $.messager.alert("提示信息","图片上传成功","info");
-
+                    /*alert(data.portraitPath);*/
                     $("#add-portrait").attr("src",data.portraitPath);
                     $("#edit-portrait").attr("src",data.portraitPath);
-                    $("#add_portrait-path").attr("src",data.portraitPath);
-                    $("#edit_portrait-path").attr("src",data.portraitPath);
+                    $("#add_portrait-path").val(data.portraitPath);
+                    $("#edit_portrait-path").val(data.portraitPath);
                 }else{
                     $.messager.alert("提示信息",data.msg,"warning");
                 }
@@ -342,7 +343,6 @@
                 <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-user-teacher',plain:true">
                     教师姓名
                 </a>
-                <%--这里有问题**********--%>
                 <input id="search-teachername" name = "teachertname" class="easyui-textbox"/>
                 <%--搜索按钮--%>
                 <a id="search-btn" href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true">
@@ -354,7 +354,7 @@
         <%--添加信息窗口--%>
         <div id="addDialog" style="padding: 15px 0 0 55px;">
             <%--设置添加头像功能 上右下左--%>
-            <div  id="add-photo" style="float: right;margin: 15px 40px 0 0;width: 250px;border:1px solid #EEF4FF">
+            <div id="add-photo" style="float: right;margin: 15px 40px 0 0;width: 250px;border:1px solid #EEF4FF">
                 <img id="add-portrait" alt="照片" style="max-width: 250px;max-height: 300px;" title="照片"
                      src="${pageContext.request.contextPath}/image/portrait/default_teacher_portrait.png"/>
                 <%--头像信息表单--%>
@@ -406,7 +406,7 @@
                     <tr>
                         <td>密码</td>
                         <td colspan="1">
-                            <input id="add_password" name="password" type="passowrd" style="width: 200px;height: 30px;" class="easyui-textbox"
+                            <input id="add_password" name="password" type="password" style="width: 200px;height: 30px;" class="easyui-textbox"
                                     data-options="required:true,missingMessage:'请填写密码'"/>
                         </td>
                     </tr>
@@ -439,7 +439,7 @@
             <%--设置修改头像功能--%>
             <div id = "edit-photo" style="float: right;margin:15px 40px 0 0;width: 250px;border: 1px solid #EEF4FF">
                <img id = "edit-portrait" alt="照片" style="max-width: 250px;max-height: 300px;" title="照片"
-                    src="${pageContext.request.contextPath}/image/portrait/default_teacher_portrait.png">
+                    src="${pageContext.request.contextPath}/image/portrait/default_teacher_portrait.png"/>
                 <%--头像信息表单--%>
                 <form id="edit-uploadForm" method="post" enctype="multipart/form-data" action="uploadPhoto" target="photo_target">
                     <input id="edit-choose-portrait" name="photo" class="easyui-filebox" data-options="prompt:'请选择照片'" style="width: 200px;"/>
@@ -450,13 +450,13 @@
             <form id="editForm" method="post" action="#">
                 <%--获取被修改信息的教师Id--%>
                 <input id="edit_id" name="id" type="hidden"/>
-                <table id="edit-table" style="border-collapse: separate;border-spacing: 0 3px;" cellpadding="6">
+                <table id="editTable" style="border-collapse: separate;border-spacing: 0 3px;" cellpadding="6">
                     <%--存储头像上传路径--%>
                     <input id="edit_portrait-path" name="portraitPath" type="hidden"/>
                     <tr>
                         <td>班级</td>
                         <td colspan="1">
-                            <select id="edit_clazz_name" name = "clazz_name" style="width: 200px;height: 30px;" class="easyui-combobox"
+                            <select id="edit_clazz_name" name = "clazzName" style="width: 200px;height: 30px;" class="easyui-combobox"
                                     data-options="required:true,missingMessage:'请选择所属班级'">
                                 <c:forEach items="${clazzList}" var="clazz">
                                     <option value="${clazz.name}">${clazz.name}</option>
@@ -482,7 +482,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>工号/td>
+                        <td>工号</td>
                         <td colspan="1">
                             <%--设为只读--%>
                             <input id="edit_tno" type="text" style="width: 200px;height: 30px;" class="easyui-textbox"

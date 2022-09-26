@@ -49,6 +49,7 @@ public class TeacherController {
                                              @RequestParam(value = "rows") Integer pageSize,
                                              @RequestParam(value = "teachername",required = false) String teacherName,
                                              @RequestParam(value = "clazzname",required = false) String clazzName){
+
         Teacher teacher = new Teacher(teacherName, clazzName);
         PageHelper.startPage(pageNum,pageSize);
         //查询全部老师信息
@@ -75,6 +76,7 @@ public class TeacherController {
             return result;
         }
         //添加
+        System.out.println("****" + teacher);
         if(teacherService.insert(teacher) > 0){
             result.put("success",true);
         }else{
@@ -92,6 +94,7 @@ public class TeacherController {
     @PostMapping("/editTeacher")
     @ResponseBody
     public Map<String,Object> editTeacher(Teacher teacher){
+        System.out.println("++++" + teacher);
         if(teacherService.update(teacher) > 0){
             result.put("success",true);
         }else{
@@ -109,6 +112,7 @@ public class TeacherController {
     @PostMapping("/deleteTeacher")
     @ResponseBody
     public Map<String,Object> deleteTeacher(@RequestParam(value = "ids[]",required = true) Integer[] ids){
+        System.out.println("正在删除老师");
         if(teacherService.deleteById(ids) > 0){
             result.put("success",true);
         }else{
@@ -120,9 +124,11 @@ public class TeacherController {
 
     @PostMapping("/uploadPhoto")
     @ResponseBody
-    public Map<String,Object> uploadPhoto(MultipartFile multipartFile, HttpServletRequest request){
+    public Map<String,Object> uploadPhoto(@RequestParam(value = "photo") MultipartFile multipartFile,
+                                          HttpServletRequest request){
+
         //存储头像的本地目录
-        final String dirPath = request.getServletContext().getRealPath("/upload/teacher_portrait");
+        final String dirPath = request.getServletContext().getRealPath("/upload/teacher_portrait/");
         final String portraitPath = request.getServletContext().getContextPath() + "/upload/teacher_portrait/";
         return UploadFile.getUploadResult(multipartFile,dirPath,portraitPath);
     }

@@ -96,4 +96,20 @@ public class Teacher {
     public void setPortraitPath(String portraitPath) {
         this.portraitPath = portraitPath;
     }
+
+    @Override
+    public String toString() {
+        return "Teacher{" +
+            "id=" + id +
+            ", tno='" + tno + '\'' +
+            ", name='" + name + '\'' +
+            ", gender=" + gender +
+            ", password='" + password + '\'' +
+            ", email='" + email + '\'' +
+            ", telephone='" + telephone + '\'' +
+            ", address='" + address + '\'' +
+            ", clazzName='" + clazzName + '\'' +
+            ", portraitPath='" + portraitPath + '\'' +
+            '}';
+    }
 }
