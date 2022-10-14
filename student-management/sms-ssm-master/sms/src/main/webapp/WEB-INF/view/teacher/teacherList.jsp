@@ -38,7 +38,7 @@
                 collapsible: false,//是否可折叠
                 fit: true,//自动大小
                 method: "post",
-                url: "getTeacherList?t" + new Date().getTime(),
+                url: "getTeacherList?t=" + new Date().getTime(),
                 idField: 'id',
                 singleSelect: false,//是否单选
                 rownumbers: true,//行号
@@ -442,7 +442,7 @@
     <!-- 设置修改头像功能 -->
     <div style="float: right; margin: 15px 40px 0 0; width: 250px; border: 1px solid #EEF4FF" id="edit-photo">
         <img id="edit-portrait" alt="照片" style="max-width: 250px; max-height: 300px;" title="照片"
-             src="${pageContext.request.contextPath}/image/portrait/default_student_portrait.png"/>
+             src="${pageContext.request.contextPath}/image/portrait/default_teacher_portrait.png"/>
         <!-- 头像信息表单 -->
         <form id="edit-uploadForm" method="post" enctype="multipart/form-data" action="uploadPhoto"
               target="photo_target">
